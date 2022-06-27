@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace Lab1
 {
@@ -12,7 +13,7 @@ namespace Lab1
         }
 
 
-        public void execute()
+        public void Execute()
         {
             string directory = "C:/MyFiles/KPI/MPP/Lab1/src/";
             List<string> fileNames = new List<string>();
@@ -20,13 +21,13 @@ namespace Lab1
             {
                 fileNames.Add(directory + "input" + i + ".txt");
             }
-            DateTime startTime = DateTime.UtcNow;
-            splitList(fileNames, threadsAmount).ForEach(fileList => new Thread(()=>createFiles(fileList)).Start());
-            DateTime endTime = DateTime.UtcNow;
-            Console.WriteLine($"IoBound total execution time: {endTime - startTime}");
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            SplitList(fileNames, threadsAmount).ForEach(fileList => new Thread(()=>CreateFiles(fileList)).Start());
+            stopwatch.Stop();
+            Console.WriteLine($"IoBound total execution time: {stopwatch.ElapsedMilliseconds}");
         }
 
-        private void createFiles(List<string> fileNames)
+        private void CreateFiles(List<string> fileNames)
         {
             foreach (string fileName in  fileNames)
             {
@@ -38,7 +39,7 @@ namespace Lab1
             }
         }
 
-        private List<List<string>> splitList(List<string> names, int limit)
+        private List<List<string>> SplitList(List<string> names, int limit)
         {
             List<List<string>> splitedList = new List<List<string>>();
             int steps = names.Count / limit;

@@ -1,4 +1,6 @@
-﻿namespace Lab1
+﻿using System.Diagnostics;
+
+namespace Lab1
 {
     public class CpuMemoryBound
     {
@@ -15,30 +17,30 @@
             this.matrixUtils = new Matrix();
         }
 
-        public void executeCpuBound()
+        public void ExecuteCpuBound()
         {
-            DateTime startTime = DateTime.UtcNow;
-            execute(CPUBOUNDMATRIXSIZE, CPUBOUNDMATRIXSIZE);
-            DateTime endTime = DateTime.UtcNow;
-            Console.WriteLine($"CpuBound total execution time: {endTime - startTime}");
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            Execute(CPUBOUNDMATRIXSIZE, CPUBOUNDMATRIXSIZE);
+            stopwatch.Stop();
+            Console.WriteLine($"CpuBound total execution time: {stopwatch.ElapsedMilliseconds}");
         }
 
-        public void executeMemoryBound()
+        public void ExecuteMemoryBound()
         {
-            DateTime startTime = DateTime.UtcNow;
-            execute(MEMORYBOUNDMATRIXSIZE, MEMORYBOUNDMATRIXSIZE);
-            DateTime endTime = DateTime.UtcNow;
-            Console.WriteLine($"MemoryBound total execution time: {endTime - startTime}");
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            Execute(MEMORYBOUNDMATRIXSIZE, MEMORYBOUNDMATRIXSIZE);
+            stopwatch.Stop();
+            Console.WriteLine($"MemoryBound total execution time: {stopwatch.ElapsedMilliseconds}");
         }
 
-        public void execute(int n, int m)
+        public void Execute(int n, int m)
         {
             List<int[,]> matrixes = matrixUtils.GenerateMatrix(n, m, matrixAmount);
             int limit = matrixes.Count / threadsAmount;
-            splitList(limit, matrixes).ForEach(matrixList => new Thread(()=>matrixUtils.MultiplyMatrixBulk(matrixList)).Start());
+            SplitList(limit, matrixes).ForEach(matrixList => new Thread(()=>matrixUtils.MultiplyMatrixBulk(matrixList)).Start());
         }
 
-        List<List<int[,]>> splitList(int limit, List<int[,]> matrixes)
+        List<List<int[,]>> SplitList(int limit, List<int[,]> matrixes)
         {
             List<List<int[,]>> splitedList = new List<List<int[,]>>();
             int steps = matrixes.Count / limit;

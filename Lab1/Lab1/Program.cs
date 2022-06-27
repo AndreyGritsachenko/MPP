@@ -7,30 +7,30 @@
             int threadCount = 10;
             Console.WriteLine($"Thread count {threadCount}");
             CpuMemoryBound executor = new CpuMemoryBound(threadCount, 1000);
-            executor.executeCpuBound();
-            executor.executeMemoryBound();
+            executor.ExecuteCpuBound();
+            executor.ExecuteMemoryBound();
 
             IoBound ioBoundExecutor = new IoBound(threadCount);
-            ioBoundExecutor.execute();
+            ioBoundExecutor.Execute();
 
             threadCount = 30;
             Console.WriteLine($"Thread count{threadCount}");
             executor = new CpuMemoryBound(threadCount, 1000);
-            executor.executeCpuBound();
-            executor.executeMemoryBound();
+            executor.ExecuteCpuBound();
+            executor.ExecuteMemoryBound();
 
             ioBoundExecutor = new IoBound(threadCount);
-            ioBoundExecutor.execute();
+            ioBoundExecutor.Execute();
 
             threadCount = 50;
             Console.WriteLine($"Thread count{threadCount}");
 
             executor = new CpuMemoryBound(threadCount, 1000);
-            executor.executeCpuBound();
-            executor.executeMemoryBound();
+            executor.ExecuteCpuBound();
+            executor.ExecuteMemoryBound();
 
             ioBoundExecutor = new IoBound(threadCount);
-            ioBoundExecutor.execute();
+            ioBoundExecutor.Execute();
         }
     }
     
