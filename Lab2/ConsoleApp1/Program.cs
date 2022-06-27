@@ -11,95 +11,33 @@ namespace ConsoleApp1
     {
         public static void Main(string[] args)
         {
+            CulculateResult(2, 1_000);
+            CulculateResult(4, 1_000);
+            CulculateResult(10, 1_000);
+            CulculateResult(2, 100_000);
+            CulculateResult(4, 100_000);
+            CulculateResult(10, 100_000);
+            CulculateResult(2, 1_000_000);
+            CulculateResult(4, 1_000_000);
+            CulculateResult(10, 1_000_000);
+        }
+
+        public static void CulculateResult(int numberOfThreds, int numberOfElements)
+        {
             Stopwatch stopwatch = new Stopwatch();
-            int numberOfThreds = 2;
             var sum = 0l;
-            TestClass testClass = new TestClass(numberOfThreds);
-            stopwatch.Start();
+            TestClass testClass = new TestClass(numberOfThreds, numberOfElements);
 
-            testClass.Compute();
-            stopwatch.Stop();
-            
-            sum = sum + stopwatch.ElapsedMilliseconds;
+            for(int i = 0; i < 5; i++)
+            {
+                stopwatch = Stopwatch.StartNew();
 
-            stopwatch = Stopwatch.StartNew();
+                testClass.Compute();
 
-            testClass.Compute();
-
-            stopwatch.Stop();
-            sum = sum + stopwatch.ElapsedMilliseconds;
-
-
-            stopwatch = Stopwatch.StartNew();
-
-            testClass.Compute();
-
-            stopwatch.Stop();
-            sum = sum + stopwatch.ElapsedMilliseconds;
-
-
-            stopwatch = Stopwatch.StartNew();
-
-            testClass.Compute();
-
-            stopwatch.Stop();
-            sum = sum + stopwatch.ElapsedMilliseconds;
-
-
-            stopwatch = Stopwatch.StartNew();
-
-            testClass.Compute();
-
-            stopwatch.Stop();
-            sum = sum + stopwatch.ElapsedMilliseconds;
-
-
-            Console.WriteLine($"Total execution time for {numberOfThreds} threads: {sum/5}ms");
-
-            sum = 0;
-            numberOfThreds = 10;
-            testClass = new TestClass(numberOfThreds);
-
-            stopwatch = Stopwatch.StartNew();
-
-            testClass.Compute();
-            stopwatch.Stop();
-
-            sum = sum + stopwatch.ElapsedMilliseconds;
-
-            stopwatch = Stopwatch.StartNew();
-
-            testClass.Compute();
-
-            stopwatch.Stop();
-            sum = sum + stopwatch.ElapsedMilliseconds;
-
-
-            stopwatch = Stopwatch.StartNew();
-
-            testClass.Compute();
-
-            stopwatch.Stop();
-            sum = sum + stopwatch.ElapsedMilliseconds;
-
-
-            stopwatch = Stopwatch.StartNew();
-
-            testClass.Compute();
-
-            stopwatch.Stop();
-            sum = sum + stopwatch.ElapsedMilliseconds;
-
-
-            stopwatch = Stopwatch.StartNew();
-
-            testClass.Compute();
-
-            stopwatch.Stop();
-            sum = sum + stopwatch.ElapsedMilliseconds;
-
-
-            Console.WriteLine($"Total execution time for {numberOfThreds} threads: {sum / 5}ms");
+                stopwatch.Stop();
+                sum = sum + stopwatch.ElapsedMilliseconds;
+            }
+            Console.WriteLine($"Total execution time for {numberOfThreds} threads for {numberOfElements} elements: {sum / 5}ms");
         }
 
     }

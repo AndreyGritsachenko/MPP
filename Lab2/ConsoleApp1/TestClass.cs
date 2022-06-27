@@ -11,11 +11,13 @@ namespace ConsoleApp1
     {
         private readonly List<int> list = new List<int>();
         private readonly int numberOfThreds;
+        //private readonly int anountOfNumbers;
 
-        public TestClass(int numberOfThreds)
+        public TestClass(int numberOfThreds, int anountOfNumbers)
         {
-            list = Enumerable.Range(0,1_000_000).ToList();
             this.numberOfThreds = numberOfThreds;
+            //this.anountOfNumbers = anountOfNumbers;
+            list = Enumerable.Range(0, anountOfNumbers).ToList();
         }
 
         public static string Transform(int element) => (element*element).ToString().GetHashCode().ToString();
