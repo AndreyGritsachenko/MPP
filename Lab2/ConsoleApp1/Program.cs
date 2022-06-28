@@ -13,13 +13,25 @@ namespace ConsoleApp1
         {
             CulculateResult(2, 1_000);
             CulculateResult(4, 1_000);
+            CulculateResult(6, 1_000);
             CulculateResult(10, 1_000);
+            CulculateResult(12, 1_000);
+            CulculateResult(14, 1_000);
+            CulculateResult(16, 1_000);
             CulculateResult(2, 100_000);
             CulculateResult(4, 100_000);
+            CulculateResult(6, 100_000);
             CulculateResult(10, 100_000);
+            CulculateResult(12, 100_000);
+            CulculateResult(14, 100_000);
+            CulculateResult(16, 100_000);
             CulculateResult(2, 1_000_000);
             CulculateResult(4, 1_000_000);
+            CulculateResult(6, 1_000_000);
             CulculateResult(10, 1_000_000);
+            CulculateResult(12, 1_000_000);
+            CulculateResult(14, 1_000_000);
+            CulculateResult(16, 1_000_000);
         }
 
         public static void CulculateResult(int numberOfThreds, int numberOfElements)
