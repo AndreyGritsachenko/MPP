@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +12,12 @@ namespace ConsoleApp1
         static List<int>[] crystal;
 
         static int ArrayLenght = 50;       
-        static double Probability = 0.7;
+        static double Probability = 0.5;
         static int PartsAmount = 10;
-        static int Iterations = 500;
+        static int Iterations = 5000000;
         static int Seconds = 30;
+        static int DelayMs = 500;
+
 
         static void Main(string[] args)
         {
@@ -43,12 +46,13 @@ namespace ConsoleApp1
         private static void IterationMode()
         {
             crystal = new List<int>[ArrayLenght];
+            Stopwatch stopwatch = new Stopwatch();
 
             for (int i = 0; i < crystal.Length; i++)
             {
                 crystal[i] = new List<int>();
             }
-
+            stopwatch.Start();
             Parallel.For(0, PartsAmount, (i, state) =>
             {
                 var task = new Thread(() => MoveParticalIterationMode(i + 1));
@@ -56,16 +60,30 @@ namespace ConsoleApp1
                 task.Start();
                 task.Join();
             });
+            stopwatch.Stop();
+
+            WriteCrystal();
+            Console.WriteLine($"Time of iteration operations is {stopwatch.ElapsedMilliseconds}ms");
         }
 
         private static void TimeMode()
         {
             crystal = new List<int>[ArrayLenght];
+            var now = DateTime.Now;
 
             for (int i = 0; i < crystal.Length; i++)
             {
                 crystal[i] = new List<int>();
             }
+
+            TaskFactory taskFactory = new TaskFactory();
+            taskFactory.StartNew(() => {
+                while (now.AddSeconds(Seconds) > DateTime.Now)
+                {
+                    Thread.Sleep(DelayMs);
+                    WriteCrystal();
+                }
+            });
 
             Parallel.For(0, PartsAmount, (i, state) =>
             {
@@ -74,6 +92,8 @@ namespace ConsoleApp1
                 task.Start();
                 task.Join();
             });
+
+            
         }
 
         private static void MoveParticalTimeMode(int number)
@@ -84,7 +104,6 @@ namespace ConsoleApp1
             lock (crystal)
             {
                 crystal[0].Add(number);
-                WriteCrystal();
             }
 
             while (now.AddSeconds(Seconds) > DateTime.Now)
@@ -95,23 +114,17 @@ namespace ConsoleApp1
                         position = MoveRight(position, number);
                     else
                         position = MoveLeft(position, number);
-
-                    WriteCrystal();
                 }
-                Thread.Sleep(100);
             }
-            
         }
 
         private static void MoveParticalIterationMode(int number)
         {
             int position = 0;
-            var now = DateTime.Now;
 
             lock (crystal)
             {
                 crystal[0].Add(number);
-                WriteCrystal();
             }
 
             for (int i = 0; i < Iterations; i++)
@@ -123,10 +136,6 @@ namespace ConsoleApp1
                     else
                         position = MoveLeft(position, number);
                 }
-            }
-            lock (crystal)
-            {
-                WriteCrystal();
             }
         }
 
@@ -156,20 +165,21 @@ namespace ConsoleApp1
 
         private static void WriteCrystal()
         {
-            Console.Clear();
-
-            Console.WriteLine(new string('-', ArrayLenght + PartsAmount * 4));
-            Console.Write("|");
-            foreach (var cell in crystal)
+            lock (crystal)
             {
-                foreach (var item in cell)
-                {
-                    Console.Write($" {item} ");
-                }
+                Console.WriteLine(new string('-', ArrayLenght + PartsAmount * 4));
                 Console.Write("|");
+                foreach (var cell in crystal)
+                {
+                    foreach (var item in cell)
+                    {
+                        Console.Write($" {item} ");
+                    }
+                    Console.Write("|");
+                }
+                Console.WriteLine();
+                Console.WriteLine(new string('-', ArrayLenght + PartsAmount * 4));
             }
-            Console.WriteLine();
-            Console.WriteLine(new string('-', ArrayLenght + PartsAmount * 4));
         }
     }
 }
